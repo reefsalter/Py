@@ -10,7 +10,7 @@ import requests
 import locale
 locale.setlocale(locale.LC_ALL, '')  # Use '' for auto, or force e.g. to 'en_US.UTF-8'
 
-TRADER_FILE = 'v1/traders.json'
+TRADER_FILE = 'traders.json'
 
 CLAIM_USER = 'f"https://api.spacetraders.io/users/{username}/claim"'
 MY_ACCOUNT = 'https://api.spacetraders.io/my/account'
@@ -225,6 +225,16 @@ def refresh_leaderboard(*args):
 
     except ConnectionError as ce:
         print('Failed:', ce)
+
+def take_out_loan(*args):
+    print('yes')
+
+def pay_off_loan(*args):
+    print('yes')
+
+def refresh_loans(*args):
+    print('yes')
+
 
 
 ###
