@@ -451,7 +451,4 @@ refresh_button.grid(column=0, row=1, columnspan=2, sticky=tk.EW, pady=5)
 loans.columnconfigure([0, 1], weight=1)
 loans.rowconfigure(0, weight=1)
 
-# Packing the notebook into the main window
-#tabs.pack(expand=True, fill="both")
-
 root.mainloop()
