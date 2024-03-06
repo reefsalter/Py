@@ -19,6 +19,9 @@ MY_LOANS = 'https://api.spacetraders.io/my/loans'
 MY_SHIPS = 'https://api.spacetraders.io/my/ships'
 MY_STRUCTURES = 'https://api.spacetraders.io/my/structures'
 GAME_LIVE = 'https://api.spacetraders.io/game/status'
+MY_LOANS = "https://api.spacetraders.io/my/loans"
+AVAILABLE_LOANS = "https://api.spacetraders.io/types/loans"
+PAY_OFF_LOAN = 'f"https://api.spacetraders.io/my/loans/{loanId}"'
 
 UTC_FORMAT = '%Y-%m-%dT%H:%M:%S.%f%z'
 DISPLAY_FORMAT = ' %B, %Y'
