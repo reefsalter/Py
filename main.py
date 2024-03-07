@@ -231,12 +231,14 @@ def refresh_leaderboard(*args):
     except ConnectionError as ce:
         print('Failed:', ce)
 
+# Take Out Loan
 def take_out_loan(*args):
     response = requests.post(MY_LOANS,params={"token": trader_token.get(), "type": "STARTUP"})
 
     if response.status_code == 422:
         print(response.json()["error"]["message"])
 
+# Pay Off Loan
 def pay_off_loan(*args):
     result = requests.get(MY_LOANS, params={"token": trader_token.get()})
     try:
@@ -254,6 +256,7 @@ def pay_off_loan(*args):
     except IndexError:
         print("You dont have any loans to pay off.")
 
+# Refresh Loans
 def refresh_loans(*args):
     try:
         response = requests.get(
