@@ -290,7 +290,7 @@ def check_game_online():
         if response.status_code == 200:
             # Parse the response JSON
             game_status = response.json().get("status", "")
-            print("Game status:", game_status)
+            # print("Game status:", game_status)
 
             # Check if the game status indicates it's online
             if "available" in game_status.lower():
