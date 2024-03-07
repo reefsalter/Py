@@ -464,8 +464,8 @@ availableLoansFrame.rowconfigure(0, weight=1)
 # Treeview for Available Loans
 available_loans_view = ttk.Treeview(availableLoansFrame, height=6, columns=('Type', 'Days', 'Rate', 'Amount'), show='headings')
 available_loans_view.column('Type', anchor=tk.CENTER, width=100)
-available_loans_view.column('Days', anchor=tk.W, width=100)
-available_loans_view.column('Rate', anchor=tk.E, width=100)
+available_loans_view.column('Days', anchor=tk.CENTER, width=100)
+available_loans_view.column('Rate', anchor=tk.CENTER, width=100)
 available_loans_view.column('Amount', anchor=tk.E, width=100)
 available_loans_view.grid(sticky=tk.NSEW)
 
