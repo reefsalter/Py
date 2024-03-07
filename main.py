@@ -91,10 +91,10 @@ def register_trader():
             show_trader_summary(result)
             trader_name.set('')
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 
 
 def login_trader():
@@ -118,10 +118,10 @@ def login_trader():
                 store_trader_login(result)
 
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 
 
 def logout_trader():
@@ -173,7 +173,7 @@ def refresh_user_summary(*args):
                 loan_view.insert('', 'end', text='loan_values', values=(row['type'], row['status'], format_datetime(row['due']), f"{row['repaymentAmount']:n}"))
 
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
         response = requests.get(MY_SHIPS, params={'token': trader_token.get()}, proxies=proxies)
         if response.status_code == 200:
@@ -188,7 +188,7 @@ def refresh_user_summary(*args):
                 ship_view.insert('', 'end', text='ship_values', values=(row['manufacturer'], row['class'], row['type'], row['location'] if 'location' in row else 'In transit'))
 
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
         response = requests.get(MY_STRUCTURES, params={'token': trader_token.get()}, proxies=proxies)
         if response.status_code == 200:
@@ -203,10 +203,10 @@ def refresh_user_summary(*args):
                 structure_view.insert('', 'end', text='structure_values', values=(row['type'], row['location'], row['active'], row['status']))
 
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 
 
 def refresh_leaderboard(*args):
@@ -226,10 +226,10 @@ def refresh_leaderboard(*args):
                 leaderboard_view.insert('', 'end', text='values', values=(result["userNetWorth"]['rank'], result["userNetWorth"]['username'], f"{result['userNetWorth']['netWorth']:n}"))
 
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 
 # Take Out Loan
 def take_out_loan(*args):
@@ -254,7 +254,7 @@ def pay_off_loan(*args):
             show_error(response.json()["error"]["message"])
 
     except IndexError:
-        print("You dont have any loans to pay off.")
+        show_error("You dont have any loans to pay off.")
 
 # Refresh Loans
 def refresh_loans(*args):
@@ -282,10 +282,10 @@ def refresh_loans(*args):
             for row in result["loans"]:
                 current_loans_view.insert('', 'end', text='values', values=(row['type'], row['status'], format_datetime(row['due']), f"{row['repaymentAmount']:n}"))
         else:
-            print('Failed:', response.status_code, response.reason, response.text)
+            show_error('Failed:', response.status_code, response.reason, response.text)
 
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 
 def check_game_online():
     try:
@@ -306,20 +306,17 @@ def check_game_online():
             # Game is offline
             show_emoji("🔴")
     except ConnectionError as ce:
-        print('Failed:', ce)
+        show_error('Failed:', ce)
 def show_emoji(emoji):
     emoji_label.config(text='Game Status: ' + emoji)
 
-def show_error(error=None, message=''):
+def show_error(*args):
     # Create a Tkinter root window
     root = tk.Tk()
     root.withdraw()  # Hide the root window
-    
-    # Combine message and error if error is provided
-    if error:
-        full_message = f"{message}\n{error}"
-    else:
-        full_message = message
+
+    # Combine all arguments into the full_message
+    full_message = '\n'.join(map(str, args))
     
     # Create and show the error message popup
     messagebox.showerror("Error", full_message)
