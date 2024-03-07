@@ -395,7 +395,7 @@ login.grid(row=0, column=2, sticky=tk.NSEW)
 # widgets required on the right are a dropdown, and a button
 trader_login = tk.StringVar()
 trader_token = tk.StringVar() # going to use this to remember the currently logged in trader
-ttk.Label(login, text='Choose the trader to play as\nor paste an existing id').grid(sticky=tk.EW)
+ttk.Label(login, text='Choose the trader to play as\nor paste an existing id', anchor=tk.CENTER).grid(sticky=tk.EW)
 id_login = ttk.Combobox(login, textvariable=trader_login, postcommand=generate_login_combobox)
 id_login.grid(row=1, column=0, sticky=tk.EW)
 ttk.Button(login, text='Login trader', command=login_trader).grid(row=2, column=0, columnspan=2, sticky=tk.EW)
