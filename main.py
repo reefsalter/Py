@@ -405,7 +405,7 @@ game_status_frame = ttk.Frame(user_frame, padding=5)
 game_status_frame.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)
 
 # Define emoji label inside game status frame
-emoji_label = tk.Label(game_status_frame, text='Game Status: 🔴', font=("Segoe UI Emoji", 20))
+emoji_label = tk.Label(game_status_frame, text='Game Status: 🔴')
 emoji_label.grid(row=0, column=0, sticky=tk.EW)
 
 login.columnconfigure(0, weight=1)
