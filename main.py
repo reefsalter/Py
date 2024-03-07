@@ -60,7 +60,6 @@ def store_trader_login(json_result):
 def generate_login_combobox():
     known_traders = load_trader_logins()
     trader_list = sorted(known_traders.keys(), key=str.casefold)
-
     id_login['values'] = trader_list
 
 
@@ -285,7 +284,29 @@ def refresh_loans(*args):
     except ConnectionError as ce:
         print('Failed:', ce)
 
+def check_game_online():
+    try:
+        response = requests.get(GAME_LIVE)
+        if response.status_code == 200:
+            # Parse the response JSON
+            game_status = response.json().get("status", "")
+            print("Game status:", game_status)
 
+            # Check if the game status indicates it's online
+            if "available" in game_status.lower():
+                # Game is online
+                show_emoji("🟢")
+            else:
+                # Game is offline
+                show_emoji("🔴")
+        else:
+            # Game is offline
+            show_emoji("🔴")
+    except ConnectionError as ce:
+        print('Failed:', ce)
+
+def show_emoji(emoji):
+    emoji_label.config(text='Game Status: ' + emoji)
 
 ###
 # Root window, with app title
@@ -313,12 +334,13 @@ user = ttk.Frame(tabs)
 summary = ttk.Frame(tabs)
 leaderboard = ttk.Frame(tabs)
 loans = ttk.Frame(tabs)
+Logout = ttk.Frame(tabs)
 
 tabs.add(user, text='User')
 tabs.add(summary, text='Summary')
 tabs.add(leaderboard, text='Leaderboard')
 tabs.add(loans, text='Loans')
-tabs.add(loans, text='Logout')
+tabs.add(Logout, text='Logout')
 
 tabs.tab(1, state=tk.DISABLED)
 tabs.tab(2, state=tk.DISABLED)
@@ -359,6 +381,14 @@ ttk.Label(login, text='Choose the trader to play as\nor paste an existing id').g
 id_login = ttk.Combobox(login, textvariable=trader_login, postcommand=generate_login_combobox)
 id_login.grid(row=1, column=0, sticky=tk.EW)
 ttk.Button(login, text='Login trader', command=login_trader).grid(row=2, column=0, columnspan=2, sticky=tk.EW)
+
+# Define frame for game status
+game_status_frame = ttk.Frame(user_frame, padding=5)
+game_status_frame.grid(row=1, column=0, columnspan=2, sticky=tk.NSEW)
+
+# Define emoji label inside game status frame
+emoji_label = tk.Label(game_status_frame, text='Game Status: 🔴', font=("Segoe UI Emoji", 20))
+emoji_label.grid(row=0, column=0, sticky=tk.EW)
 
 login.columnconfigure(0, weight=1)
 login.rowconfigure(0, weight=1)
@@ -516,4 +546,5 @@ refresh_button.grid(column=0, row=1, columnspan=2, sticky=tk.EW, pady=5)
 loans.columnconfigure([0, 1], weight=1)
 loans.rowconfigure(0, weight=1)
 
+root.after(1000, check_game_online)
 root.mainloop()
