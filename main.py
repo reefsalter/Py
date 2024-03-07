@@ -140,14 +140,13 @@ def logout_trader():
 def refresh_tabs(event):
     selected_index = tabs.index(tabs.select())
     if selected_index == 1:
-        refresh_user_summary()
-        
+        refresh_user_summary()   
     elif selected_index == 2:
         refresh_leaderboard()
     elif selected_index == 3:
         refresh_loans()
     elif selected_index == 4:
-        logout_trader()
+        confirm_logout()
 
 
 def refresh_user_summary(*args):
@@ -323,6 +322,23 @@ def show_error(*args):
 
     root.mainloop()
 
+def confirm_logout():
+    # Create a Tkinter root window
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    
+    # Prompt the user with a messagebox
+    confirm = messagebox.askyesno("Logout", "Are you sure you want to logout?")
+    
+    if confirm:
+        logout_trader()  # Logout the user if they confirm
+    else:
+        # Return the user to the tab they were on
+        # Add your code here to implement this functionality
+        pass
+    
+    root.mainloop()
+
 ###
 # Root window, with app title
 #
@@ -344,7 +360,7 @@ tabs.bind('<<NotebookTabChanged>>', refresh_tabs)
 main.columnconfigure(0, weight=1)
 main.rowconfigure(0, weight=1)
 
-# setup the three main tabs
+# setup the main tabs
 user = ttk.Frame(tabs)
 summary = ttk.Frame(tabs)
 leaderboard = ttk.Frame(tabs)
