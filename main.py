@@ -235,7 +235,7 @@ def take_out_loan(*args):
     response = requests.post(MY_LOANS,params={"token": trader_token.get(), "type": "STARTUP"})
 
     if response.status_code == 422:
-        print(response.json()["error"]["message"])
+        show_error(response.json()["error"]["message"])
 
 # Pay Off Loan
 def pay_off_loan(*args):
