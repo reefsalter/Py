@@ -227,7 +227,10 @@ def refresh_leaderboard(*args):
         print('Failed:', ce)
 
 def take_out_loan(*args):
-    print('yes')
+    response = requests.post(MY_LOANS,params={"token": trader_token.get(), "type": "STARTUP"})
+
+    if response.status_code == 422:
+        print(response.json()["error"]["message"])
 
 def pay_off_loan(*args):
     print('yes')
@@ -428,7 +431,7 @@ available_loans_scroll = ttk.Scrollbar(availableLoansFrame, orient=tk.VERTICAL, 
 available_loans_scroll.grid(column=1, row=0, sticky=tk.NS)
 available_loans_view['yscrollcommand'] = available_loans_scroll.set
 
-take_out_loan_button = ttk.Button(availableLoansFrame, text='Take Out Loan')
+take_out_loan_button = ttk.Button(availableLoansFrame, text='Take Out Loan', command=take_out_loan)
 # command=take_out_loan
 take_out_loan_button.grid(column=0, row=1, sticky=tk.EW, pady=5)
 
