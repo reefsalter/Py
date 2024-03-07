@@ -304,7 +304,6 @@ def check_game_online():
             show_emoji("🔴")
     except ConnectionError as ce:
         print('Failed:', ce)
-    root.after(1000, check_game_online)
 def show_emoji(emoji):
     emoji_label.config(text='Game Status: ' + emoji)
 
@@ -546,4 +545,5 @@ refresh_button.grid(column=0, row=1, columnspan=2, sticky=tk.EW, pady=5)
 loans.columnconfigure([0, 1], weight=1)
 loans.rowconfigure(0, weight=1)
 
+root.after(1000, check_game_online)
 root.mainloop()
