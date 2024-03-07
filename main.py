@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 
 from datetime import datetime, timezone
 
@@ -249,7 +249,7 @@ def pay_off_loan(*args):
         )
 
         if response.status_code == 400:
-            print(response.json()["error"]["message"])
+            show_error(response.json()["error"]["message"])
 
     except IndexError:
         print("You dont have any loans to pay off.")
@@ -306,6 +306,22 @@ def check_game_online():
         print('Failed:', ce)
 def show_emoji(emoji):
     emoji_label.config(text='Game Status: ' + emoji)
+
+def show_error(error=None, message=''):
+    # Create a Tkinter root window
+    root = tk.Tk()
+    root.withdraw()  # Hide the root window
+    
+    # Combine message and error if error is provided
+    if error:
+        full_message = f"{message}\n{error}"
+    else:
+        full_message = message
+    
+    # Create and show the error message popup
+    messagebox.showerror("Error", full_message)
+
+    root.mainloop()
 
 ###
 # Root window, with app title
