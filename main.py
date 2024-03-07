@@ -143,6 +143,8 @@ def refresh_tabs(event):
         
     elif selected_index == 2:
         refresh_leaderboard()
+    elif selected_index == 3:
+        refresh_loans()
 
 
 def refresh_user_summary(*args):
@@ -233,10 +235,51 @@ def take_out_loan(*args):
         print(response.json()["error"]["message"])
 
 def pay_off_loan(*args):
-    print('yes')
+    result = requests.get(MY_LOANS, params={"token": trader_token.get()})
+    try:
+        loanId = result.json()["loans"][0]["id"]
+
+        pay_loan = eval(PAY_OFF_LOAN)
+
+        response = requests.put(
+            pay_loan, params={"token": trader_token.get(), "loanId": loanId}
+        )
+
+        if response.status_code == 400:
+            print(response.json()["error"]["message"])
+
+    except IndexError:
+        print("You dont have any loans to pay off.")
 
 def refresh_loans(*args):
-    print('yes')
+    try:
+        response = requests.get(
+            AVAILABLE_LOANS, params={"token": trader_token.get()})
+        if response.status_code == 200:
+            result = response.json()
+            available_loans_view.delete(*available_loans_view.get_children())
+            available_loans_view.heading('#1', text='Type')
+            available_loans_view.heading('#2', text='Days')
+            available_loans_view.heading('#3', text='Rate')
+            available_loans_view.heading('#4', text='Amount')
+            for row in result["loans"]:
+                available_loans_view.insert('', 'end', text='values',values=(row["type"], row["termInDays"], row["rate"], row["amount"]))
+
+        response = requests.get(MY_LOANS, params={"token": trader_token.get()})
+        if response.status_code == 200:
+            result = response.json()
+            current_loans_view.delete(*current_loans_view.get_children())
+            current_loans_view.heading('#1', text='Type')
+            current_loans_view.heading('#2', text='Status')
+            current_loans_view.heading('#3', text='Due')
+            current_loans_view.heading('#4', text='Amount')
+            for row in result["loans"]:
+                current_loans_view.insert('', 'end', text='values', values=(row['type'], row['status'], format_datetime(row['due']), f"{row['repaymentAmount']:n}"))
+        else:
+            print('Failed:', response.status_code, response.reason, response.text)
+
+    except ConnectionError as ce:
+        print('Failed:', ce)
 
 
 
@@ -419,10 +462,10 @@ availableLoansFrame.columnconfigure(0, weight=1)
 availableLoansFrame.rowconfigure(0, weight=1)
 
 # Treeview for Available Loans
-available_loans_view = ttk.Treeview(availableLoansFrame, height=6, columns=('Type', 'Status', 'Due', 'Amount'), show='headings')
+available_loans_view = ttk.Treeview(availableLoansFrame, height=6, columns=('Type', 'Days', 'Rate', 'Amount'), show='headings')
 available_loans_view.column('Type', anchor=tk.CENTER, width=100)
-available_loans_view.column('Status', anchor=tk.W, width=100)
-available_loans_view.column('Due', anchor=tk.E, width=100)
+available_loans_view.column('Days', anchor=tk.W, width=100)
+available_loans_view.column('Rate', anchor=tk.E, width=100)
 available_loans_view.column('Amount', anchor=tk.E, width=100)
 available_loans_view.grid(sticky=tk.NSEW)
 
@@ -454,12 +497,12 @@ current_loans_scroll = ttk.Scrollbar(currentLoansFrame, orient=tk.VERTICAL, comm
 current_loans_scroll.grid(column=1, row=0, sticky=tk.NS)
 current_loans_view['yscrollcommand'] = current_loans_scroll.set
 
-pay_off_loan_button = ttk.Button(currentLoansFrame, text='Pay Out Loan')
+pay_off_loan_button = ttk.Button(currentLoansFrame, text='Pay Out Loan', command=pay_off_loan)
 # , command=pay_off_loan
 pay_off_loan_button.grid(column=0, row=1, sticky=tk.EW, pady=5)
 
 # Refresh button for the entire tab
-refresh_button = ttk.Button(loans, text='Refresh')
+refresh_button = ttk.Button(loans, text='Refresh', command=refresh_loans)
 #  command=refresh_loans
 refresh_button.grid(column=0, row=1, columnspan=2, sticky=tk.EW, pady=5)
 
