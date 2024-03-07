@@ -69,6 +69,7 @@ def show_trader_summary(json_result):
     tabs.tab(1, state=tk.NORMAL)
     tabs.tab(2, state=tk.NORMAL)
     tabs.tab(3, state=tk.NORMAL)
+    tabs.tab(4, state=tk.NORMAL)
     
     trader_login.set(json_result['user']['username'])
     trader_token.set(json_result['token'])
@@ -129,6 +130,7 @@ def logout_trader():
     tabs.tab(1, state=tk.DISABLED)
     tabs.tab(2, state=tk.DISABLED)
     tabs.tab(3, state=tk.DISABLED)
+    tabs.tab(4, state=tk.DISABLED)
     
     trader_login.set('')
     trader_token.set('')
@@ -145,6 +147,8 @@ def refresh_tabs(event):
         refresh_leaderboard()
     elif selected_index == 3:
         refresh_loans()
+    elif selected_index == 4:
+        logout_trader()
 
 
 def refresh_user_summary(*args):
@@ -314,10 +318,12 @@ tabs.add(user, text='User')
 tabs.add(summary, text='Summary')
 tabs.add(leaderboard, text='Leaderboard')
 tabs.add(loans, text='Loans')
+tabs.add(loans, text='Logout')
 
 tabs.tab(1, state=tk.DISABLED)
 tabs.tab(2, state=tk.DISABLED)
 tabs.tab(3, state=tk.DISABLED)
+tabs.tab(4, state=tk.DISABLED)
 
 ###
 # user registration/login tab
