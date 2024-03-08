@@ -69,6 +69,7 @@ def show_trader_summary(json_result):
     tabs.tab(2, state=tk.NORMAL)
     tabs.tab(3, state=tk.NORMAL)
     tabs.tab(4, state=tk.NORMAL)
+    tabs.tab(5, state=tk.NORMAL)
     
     trader_login.set(json_result['user']['username'])
     trader_token.set(json_result['token'])
@@ -130,6 +131,7 @@ def logout_trader():
     tabs.tab(2, state=tk.DISABLED)
     tabs.tab(3, state=tk.DISABLED)
     tabs.tab(4, state=tk.DISABLED)
+    tabs.tab(5, state=tk.DISABLED)
     
     trader_login.set('')
     trader_token.set('')
@@ -146,6 +148,8 @@ def refresh_tabs(event):
     elif selected_index == 3:
         refresh_loans()
     elif selected_index == 4:
+        refresh_ships()
+    elif selected_index == 5:
         confirm_logout()
 
 
@@ -335,9 +339,31 @@ def confirm_logout():
     else:
         # Return the user to the tab they were on
         # Add your code here to implement this functionality
-        pass
+        tabs.select(1)
     
     root.mainloop()
+
+
+# Refresh Ships
+def refresh_ships():
+    try:
+        response = requests.get(MY_SHIPS, params={"token": trader_token.get()})
+        if response.status_code == 200:
+            result = response.json()
+            ships_view.delete(*ships_view.get_children())
+            ships_view.heading('#1', text='Manufacturer')
+            ships_view.heading('#2', text='Class')
+            ships_view.heading('#3', text='Type')
+            ships_view.heading('#4', text='Location')
+            for row in result["ships"]:
+                ships_view.insert('', 'end', text='values', values=(row["manufacturer"], row["class"], row["type"], row["location"]))
+
+        else:
+            show_error('Failed:', response.status_code, response.reason, response.text)
+
+    except ConnectionError as ce:
+        show_error('Failed:', ce)
+
 
 ###
 # Root window, with app title
@@ -365,18 +391,21 @@ user = ttk.Frame(tabs)
 summary = ttk.Frame(tabs)
 leaderboard = ttk.Frame(tabs)
 loans = ttk.Frame(tabs)
+ships = ttk.Frame(tabs)
 Logout = ttk.Frame(tabs)
 
 tabs.add(user, text='User')
 tabs.add(summary, text='Summary')
 tabs.add(leaderboard, text='Leaderboard')
 tabs.add(loans, text='Loans')
+tabs.add(ships, text='Ships')
 tabs.add(Logout, text='Logout')
 
 tabs.tab(1, state=tk.DISABLED)
 tabs.tab(2, state=tk.DISABLED)
 tabs.tab(3, state=tk.DISABLED)
 tabs.tab(4, state=tk.DISABLED)
+tabs.tab(5, state=tk.DISABLED)
 
 ###
 # user registration/login tab
@@ -576,6 +605,39 @@ refresh_button.grid(column=0, row=1, columnspan=2, sticky=tk.EW, pady=5)
 # Configuring the layout
 loans.columnconfigure([0, 1], weight=1)
 loans.rowconfigure(0, weight=1)
+
+
+###
+# ships tab
+#
+
+# Create a frame for the ships tab
+ships_frame = ttk.LabelFrame(ships, text="Ships", padding="3")
+ships_frame.grid(row=0, column=0, sticky=tk.NSEW, padx=5, pady=5)
+ships_frame.columnconfigure(0, weight=1)
+ships_frame.rowconfigure(0, weight=1)
+
+# Create a Treeview for the ships tab
+ships_view = ttk.Treeview(ships_frame, height=6, columns=('Manufacturer', 'Class', 'Type', 'Location'), show='headings')
+ships_view.column('Manufacturer', anchor=tk.CENTER, width=100)
+ships_view.column('Class', anchor=tk.CENTER)
+ships_view.column('Type', anchor=tk.CENTER)
+ships_view.column('Location', anchor=tk.CENTER)
+ships_view.grid(sticky=tk.NSEW)
+
+# Create a scrollbar for the ships tab
+ships_scroll = ttk.Scrollbar(ships_frame, orient=tk.VERTICAL, command=ships_view.yview)
+ships_scroll.grid(column=1, row=0, sticky=tk.NS)
+ships_view['yscrollcommand'] = ships_scroll.set
+
+# Create a refresh button for the ships tab
+refresh_button = ttk.Button(ships, text='Refresh', command=refresh_ships)
+refresh_button.grid(column=0, row=1, sticky=tk.EW, pady=5)
+
+# Configuring the layout
+ships.columnconfigure(0, weight=1)
+ships.rowconfigure(0, weight=1)
+
 
 root.after(1000, check_game_online)
 root.mainloop()
