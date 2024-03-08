@@ -638,6 +638,7 @@ refresh_button.grid(column=0, row=1, sticky=tk.EW, pady=5)
 ships.columnconfigure(0, weight=1)
 ships.rowconfigure(0, weight=1)
 
-
+# Check if come is online when the program first runs
 root.after(1000, check_game_online)
+
 root.mainloop()
