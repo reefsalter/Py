@@ -1,2 +1,3 @@
 # Ignore traders.json file
 traders.json
+.DS_Store
