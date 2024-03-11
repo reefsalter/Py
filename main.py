@@ -237,6 +237,7 @@ def refresh_leaderboard(*args):
 # Take Out Loan
 def take_out_loan(*args):
     response = requests.post(MY_LOANS,params={"token": trader_token.get(), "type": "STARTUP"})
+    refresh_loans()
 
     if response.status_code == 422:
         show_error(response.json()["error"]["message"])
