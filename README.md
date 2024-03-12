@@ -3,7 +3,7 @@
 This repository contains the codebase for SpaceTraders.io, a mini NEA (Non-Exam Assessment) Computer Science project.
 
 Hours lost due to this project
-[![Hours lost due to this project](https://wakatime.com/badge/user/018d2d01-60d9-4162-a2d6-1083a0988b8d/project/018e1508-0588-4d27-bcbb-25ef8214c7d2.svg)](https://wakatime.com/badge/user/018d2d01-60d9-4162-a2d6-1083a0988b8d/project/018e1508-0588-4d27-bcbb-25ef8214c7d2)
+[![wakatime](https://wakatime.com/badge/user/018d2d01-60d9-4162-a2d6-1083a0988b8d/project/018e1508-0588-4d27-bcbb-25ef8214c7d2.svg)](https://wakatime.com/badge/user/018d2d01-60d9-4162-a2d6-1083a0988b8d/project/018e1508-0588-4d27-bcbb-25ef8214c7d2)
 
 ## Setup
 
